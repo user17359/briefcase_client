@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+
+import 'progress_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -119,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-
+        automaticallyImplyLeading: false,
         title: Text('Sent $_counter photos'),
       ),
       body: Center(
@@ -162,7 +165,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 IconButton(
                   icon: const Icon(Icons.check),
                   color: const Color(0x99FFFFFF),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push((context),
+                      MaterialPageRoute(builder:
+                          (context) => ProgressScreen(total: 15),));},
                 ),
                 const Text('FINISH', style: TextStyle(color: Color(0x99FFFFFF), letterSpacing: 1)),
                 const Padding(padding: EdgeInsets.all(4.0))
@@ -175,7 +181,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 IconButton(
                   icon: const Icon(Icons.photo_library),
                   color: const Color(0x99FFFFFF),
-                  onPressed: () {},
+                  onPressed: () async {
+                      final ImagePicker imagePicker = ImagePicker();
+                      final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
+                      Navigator.push((context),
+                        MaterialPageRoute(builder:
+                          (context) => ProgressScreen(total: 15),));
+                    },
                 ),
                 const Text('GALLERY', style: TextStyle(color: Color(0x99FFFFFF), letterSpacing: 1)),
                 const Padding(padding: EdgeInsets.all(4.0))
