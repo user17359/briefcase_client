@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="law.briefcase.briefcase_client">
-   <application
+    <!-- Required to fetch data from the internet. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
         android:label="briefcase_client"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -37,5 +40,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
     </application>
+
 </manifest>

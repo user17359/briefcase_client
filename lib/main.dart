@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,7 +72,18 @@ class _MyHomePageState extends State<MyHomePage> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
 
-  void _incrementCounter() {
+  void _cameraButton(File image) async{
+    var uri = Uri.parse('http://192.168.0.31:8000/test/image');
+    var bytes = await image.readAsBytes();
+    List<int> list  =  List.from(bytes);
+    var request = http.Request('PUT', uri);
+
+    request.bodyBytes = list;
+    request.headers[HttpHeaders.contentTypeHeader] = "image/jpg";
+
+    var response = await request.send();
+    if (response.statusCode == 200) print('Uploaded!');
+    else print('Error');
     setState(() {
       _counter++;
     });
@@ -84,7 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
       // Get a specific camera from the list of available cameras.
       widget.camera,
       // Define the resolution to use.
-      ResolutionPreset.high,
+      ResolutionPreset.ultraHigh,
+      enableAudio: false,
     );
 
     // Next, initialize the controller. This returns a Future.
@@ -105,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.black,
       appBar: AppBar(
 
-        title: Text('Sending $_counter photos'),
+        title: Text('Sent $_counter photos'),
       ),
       body: Center(
           child: FutureBuilder<void>(
@@ -125,7 +140,11 @@ class _MyHomePageState extends State<MyHomePage> {
         height: 70.0,
         width: 70.0,
         child: FloatingActionButton(
-          onPressed: _incrementCounter,
+          onPressed: () async {
+            _controller.setFlashMode(FlashMode.off);
+            var image = await _controller.takePicture();
+            _cameraButton(File(image.path));
+          },
           tooltip: 'Increment',
 
           child: const Icon(Icons.photo_camera_outlined),
