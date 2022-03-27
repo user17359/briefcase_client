@@ -1,8 +1,7 @@
+import 'package:briefcase_client/galery_screen.dart';
 import 'package:briefcase_client/mockup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-List<List<String>> imageLinks = [];
 
 class FoldersScreen extends StatelessWidget {
 
@@ -22,9 +21,9 @@ class FoldersScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             return ListTile(
                 onTap: () {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text(mockCategory.keys.elementAt(index) + ' pressed!'),
-                  ));
+                  Navigator.push((context),
+                      MaterialPageRoute(builder:
+                          (context) => GalleryScreen(category: mockCategory.keys.elementAt(index))));
                 },
                 title: Text(mockCategory.keys.elementAt(index)),
                 subtitle: Text("${mockCategory[mockCategory.keys.elementAt(index)]!.length} photos"),
