@@ -48,7 +48,7 @@ class _PhotoScreen extends State<PhotoScreen> {
             },
 
             secondaryBackground: ((translate + widget.number + 1) < mockCategory[widget.category]!.length) ? Image.network(
-                mockCategory[widget.category]![widget.number + translate + 1],
+              ("http://3874-89-64-44-23.ngrok.io/images/" + mockCategory[widget.category]![widget.number + translate + 1]),
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent? loadingProgress) {
                   if (loadingProgress == null) return child;
@@ -64,7 +64,7 @@ class _PhotoScreen extends State<PhotoScreen> {
               ) : Container(color: Colors.white),
 
             background: (translate + widget.number) > 0 ? Image.network(
-              mockCategory[widget.category]![widget.number + translate - 1],
+              ("http://3874-89-64-44-23.ngrok.io/images/" + mockCategory[widget.category]![widget.number + translate - 1]),
               loadingBuilder: (BuildContext context, Widget child,
                   ImageChunkEvent? loadingProgress) {
                 if (loadingProgress == null) return child;
@@ -81,25 +81,25 @@ class _PhotoScreen extends State<PhotoScreen> {
 
 
             key: new ValueKey(translate),
-            child: Column(
+            child: Row(
               children: [
-                Spacer(),
-                Image.network(
-                  mockCategory[widget.category]![widget.number + translate],
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
-                  ),
-                Spacer()
+                Expanded(
+                  child: Image.network(
+                    ("http://3874-89-64-44-23.ngrok.io/images/" + mockCategory[widget.category]![widget.number + translate]),
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
+                ),
               ],
             ),
           ),

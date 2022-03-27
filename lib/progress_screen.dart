@@ -37,7 +37,6 @@ class _ProgressScreenState extends State<ProgressScreen> {
   @override
   void initState() {
     mockBatch(test);
-    print('dupa');
     getStatus(test, display, 1, refresh);
     super.initState();
   }
@@ -58,7 +57,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               Text("${display.progress} of ${display.total} images processed", style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 20)),
               const Padding(padding: EdgeInsets.all(5.0)),
               LinearProgressIndicator(
-                value: display.progress/display.total,
+                value: (display.progress/display.total).isFinite ? (display.progress/display.total) : 0,
                 semanticsLabel: 'Linear progress indicator',
               ),
               const Spacer()

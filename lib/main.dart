@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -7,7 +8,21 @@ import 'package:image_picker/image_picker.dart';
 
 import 'progress_screen.dart';
 
+String uid = "";
+
+Future<String> getUid() async{
+  var uri = Uri.parse('http://3874-89-64-44-23.ngrok.io/batches');
+  var request = http.Request('POST', uri);
+  var response = await request.send();
+  if (response.statusCode == 200) print('Uploaded!');
+  else print('Error');
+  String responseString =  await response.stream.bytesToString() ;
+  uid = jsonDecode(responseString)['id'];
+  return uid;
+}
+
 void main() async{
+  await getUid();
   WidgetsFlutterBinding.ensureInitialized();
   final cameras = await availableCameras();
   CameraDescription firstCamera = cameras.first;
@@ -76,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late Future<void> _initializeControllerFuture;
 
   void _cameraButton(File image) async{
-    var uri = Uri.parse('http://192.168.0.31:8000/test/image');
+    var uri = Uri.parse('http://3874-89-64-44-23.ngrok.io/batches/' + uid + '/images');
     var bytes = await image.readAsBytes();
     List<int> list  =  List.from(bytes);
     var request = http.Request('PUT', uri);
@@ -85,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
     request.headers[HttpHeaders.contentTypeHeader] = "image/jpg";
 
     var response = await request.send();
-    if (response.statusCode == 200) print('Uploaded!');
+    if (response.statusCode == 201) print('Created!');
     else print('Error');
     setState(() {
       _counter++;
@@ -184,6 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () async {
                       final ImagePicker imagePicker = ImagePicker();
                       final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
+                      selectedImages!.forEach((element) {_cameraButton(File(element.path)); });
                       Navigator.push((context),
                         MaterialPageRoute(builder:
                           (context) => ProgressScreen(total: 15),));

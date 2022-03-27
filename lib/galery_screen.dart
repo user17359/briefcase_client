@@ -32,7 +32,7 @@ class GalleryScreen extends StatelessWidget {
                                 (context) => PhotoScreen(category: category, number: index)));
                       },
                       child: Image.network(
-                        mockCategory[category]![index],
+                        ("http://3874-89-64-44-23.ngrok.io/images/" + mockCategory[category]![index]),
                         fit: BoxFit.fill,
                         scale: 0.1,
                         loadingBuilder: (BuildContext context, Widget child,

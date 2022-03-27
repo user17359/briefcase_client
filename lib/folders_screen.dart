@@ -26,7 +26,7 @@ class FoldersScreen extends StatelessWidget {
                           (context) => GalleryScreen(category: mockCategory.keys.elementAt(index))));
                 },
                 title: Text(mockCategory.keys.elementAt(index)),
-                subtitle: Text("${mockCategory[mockCategory.keys.elementAt(index)]!.length} photos"),
+                subtitle: mockCategory.keys.isNotEmpty ? Text("${mockCategory[mockCategory.keys.elementAt(index)]!.length} photos") : Text("0 photos"),
                 leading: CircleAvatar(backgroundColor: Theme.of(context).colorScheme.primary));
           })
     );
